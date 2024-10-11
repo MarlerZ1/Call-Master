@@ -2,18 +2,17 @@ from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy import TIMESTAMP
-from sqlalchemy.orm import relationship
 
-from databases import Base
+from databases import Base, SessionLocal
 
 
 class ClientModel(Base):
     __tablename__ = "clients"
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key=True)
     first_name = Column(String(30), nullable=False)
-    last_name= Column(String(30), nullable=True)
+    last_name = Column(String(30), nullable=True)
     middle_name = Column(String(30), nullable=True)
-    email= Column(String(100), nullable=False, unique=True)
+    email = Column(String(100), nullable=False, unique=True)
     phone_number = Column(String(20), nullable=False)
     password = Column(String(250), nullable=False)
     timestamp = Column(TIMESTAMP, default=datetime.utcnow)
@@ -21,17 +20,18 @@ class ClientModel(Base):
 
 class SpecialistModel(Base):
     __tablename__ = "specialist"
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key=True)
     first_name = Column(String(30), nullable=False)
-    last_name= Column(String(30), nullable=True)
+    last_name = Column(String(30), nullable=True)
     middle_name = Column(String(30), nullable=True)
-    email= Column(String(100), nullable=False, unique=True)
+    email = Column(String(100), nullable=False, unique=True)
     phone_number = Column(String(20), nullable=False)
     password = Column(String(250), nullable=False)
     timestamp = Column(TIMESTAMP, default=datetime.utcnow)
 
-
     # mtm = relationship("SpecialistSpecializationsMTM", back_populates="SpecialistModel")
+
+
 class SpecializationsModels(Base):
     __tablename__ = "specialization"
     id = Column(Integer, primary_key=True)
@@ -39,6 +39,17 @@ class SpecializationsModels(Base):
     title = Column(String(30), nullable=False)
 
     # mtm = relationship("SpecialistSpecializationsMTM", back_populates="SpecializationsModels")
+
+    @classmethod
+    def add_basic_specialization(cls):
+        db = SessionLocal()
+        db.add(
+            SpecializationsModels(cypher="tv", title="cardiologist")
+        )
+        db.add(
+            SpecializationsModels(cypher="pc", title="dermatologist")
+        )
+        db.commit()
 
 
 class SpecialistSpecializationsMTM(Base):

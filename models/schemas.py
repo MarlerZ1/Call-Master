@@ -8,14 +8,17 @@ from pydantic import EmailStr, constr, BaseModel, field_validator
 class EmailVerification(BaseModel):
     email: EmailStr
 
+
 class PhoneVerification(BaseModel):
     phone_number: constr(pattern=r'^\+?1?\d{9,15}$')
+
 
 class PasswordVerification(BaseModel):
     password: constr(
         min_length=8,
         max_length=20
     )
+
 
 class HumanVerification(BaseModel):
     first_name: str
@@ -27,6 +30,7 @@ class HumanVerification(BaseModel):
         if not value.isalpha():
             raise ValueError("Only letters are allowed for this field")
         return value
+
 
 class Client(EmailVerification, PhoneVerification, PasswordVerification, HumanVerification):
     timestamp: datetime
@@ -40,12 +44,15 @@ class ClientDTO(EmailVerification, PhoneVerification, HumanVerification):
     timestamp: datetime
     password: str
 
+
 class SpecializationEnum(str, Enum):
     cardiologist = 'tv'
     dermatologist = 'pc'
 
+
 class Specialist(Client):
     specialization: List[SpecializationEnum]
+
 
 class SpecialistDTO(Specialist):
     id: int
