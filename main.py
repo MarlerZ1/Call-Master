@@ -6,7 +6,7 @@ from fastapi import FastAPI
 import databases
 from databases import engine
 from models.models import SpecializationsModels
-from views.routers import router as v1_router
+from controllers.routers import router as v1_router
 
 app = FastAPI()
 databases.Base.metadata.create_all(bind=engine)

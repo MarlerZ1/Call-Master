@@ -1,8 +1,11 @@
 from datetime import datetime
 
+from cryptography.fernet import Fernet
+from fastapi.responses import JSONResponse
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy import TIMESTAMP
 
+from config import SECRET_KEY
 from databases import Base, SessionLocal
 
 
@@ -17,6 +20,40 @@ class ClientModel(Base):
     password = Column(String(250), nullable=False)
     timestamp = Column(TIMESTAMP, default=datetime.utcnow)
 
+    @staticmethod
+    def create_client(client, db):
+        client = ClientModel(
+            first_name=client.first_name,
+            last_name=client.last_name,
+            middle_name=client.middle_name,
+            email=client.email,
+            phone_number=client.phone_number,
+            password=Fernet(SECRET_KEY).encrypt(client.password.encode()).decode(),
+            timestamp=client.timestamp
+        )
+
+        db.add(client)
+        db.commit()
+
+    @staticmethod
+    def get_client_by_id(clientId, db):
+        return db.query(ClientModel).filter(ClientModel.id == clientId).first()
+
+    @staticmethod
+    def change_email(client, email, db):
+        client.email = email.email
+        db.commit()
+
+    @staticmethod
+    def change_phone(client, phone, db):
+        client.phone_number = phone.phone_number
+        db.commit()
+
+    @staticmethod
+    def change_password(client, password, db):
+        client.password = Fernet(SECRET_KEY).encrypt(password.password.encode()).decode()
+        db.commit()
+
 
 class SpecialistModel(Base):
     __tablename__ = "specialist"
@@ -29,6 +66,51 @@ class SpecialistModel(Base):
     password = Column(String(250), nullable=False)
     timestamp = Column(TIMESTAMP, default=datetime.utcnow)
 
+    @staticmethod
+    def create_specialist_with_mtm_relation(specialist, db):
+        specialist_model = SpecialistModel(
+            first_name=specialist.first_name,
+            last_name=specialist.last_name,
+            middle_name=specialist.middle_name,
+            email=specialist.email,
+            phone_number=specialist.phone_number,
+            password=Fernet(SECRET_KEY).encrypt(specialist.password.encode()).decode(),
+            timestamp=specialist.timestamp,
+        )
+
+        try:
+            db.add(specialist_model)
+            db.flush()
+        except:
+            return JSONResponse(content={"message": "There is already a user with such an email"}, status_code=409)
+
+        for specialization in specialist.specialization:
+            db.add(SpecialistSpecializationsMTM(
+                specialist_id=specialist_model.id,
+                specialization_id=db.query(SpecializationsModels).filter(
+                    SpecializationsModels.cypher == specialization.value).first().id
+            ))
+
+        db.commit()
+
+    @staticmethod
+    def get_specialist_by_id(clientId, db):
+        return db.query(ClientModel).filter(ClientModel.id == clientId).first()
+
+    @staticmethod
+    def change_email(client, email, db):
+        client.email = email.email
+        db.commit()
+
+    @staticmethod
+    def change_phone(client, phone, db):
+        client.phone_number = phone.phone_number
+        db.commit()
+
+    @staticmethod
+    def change_password(client, password, db):
+        client.password = Fernet(SECRET_KEY).encrypt(password.password.encode()).decode()
+        db.commit()
     # mtm = relationship("SpecialistSpecializationsMTM", back_populates="SpecialistModel")
 
 
