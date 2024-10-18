@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from cryptography.fernet import Fernet
-from fastapi.responses import JSONResponse
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy import TIMESTAMP
 
@@ -82,7 +81,7 @@ class SpecialistModel(Base):
             db.add(specialist_model)
             db.flush()
         except:
-            return JSONResponse(content={"message": "There is already a user with such an email"}, status_code=409)
+            return -1
 
         for specialization in specialist.specialization:
             db.add(SpecialistSpecializationsMTM(

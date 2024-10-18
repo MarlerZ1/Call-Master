@@ -1,10 +1,11 @@
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-from config import DB_USER, MYSQL_DATABASE, DB_PORT, DB_HOST, MYSQL_ROOT_PASSWORD
+from apps.utils.main import config
 
-SQLALCHEMY_DATABASE_URL = f"mysql://{DB_USER}:{MYSQL_ROOT_PASSWORD}@{DB_HOST}:{DB_PORT}/{MYSQL_DATABASE}"
+# from config import DB_USER, MYSQL_DATABASE, DB_PORT, DB_HOST, MYSQL_ROOT_PASSWORD
+
+SQLALCHEMY_DATABASE_URL = f"mysql://{config.DB_USER}:{config.MYSQL_ROOT_PASSWORD}@{config.DB_HOST}:{config.DB_PORT}/{config.MYSQL_DATABASE}"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
