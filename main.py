@@ -1,10 +1,7 @@
-import os
-
-from cryptography.fernet import Fernet
 from fastapi import FastAPI
 
-import databases
-from databases import engine
+from models import databases
+from models.databases import engine
 from models.models import SpecializationsModels
 from controllers.routers import router as v1_router
 

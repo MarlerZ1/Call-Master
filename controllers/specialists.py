@@ -2,19 +2,20 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from databases import get_db
+from models.databases import get_db
 from models.models import SpecialistModel
-from models.schemas import Specialist, EmailVerification, PhoneVerification, PasswordVerification
+from controllers.schemas import Specialist, EmailVerification, PhoneVerification, PasswordVerification
 
 router = APIRouter(prefix="/specialists")
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_specialist_view(specialist: Specialist, db: Session = Depends(get_db)):
-    if SpecialistModel.create_specialist_with_mtm_relation(specialist, db) == -1:
+    try:
+        SpecialistModel.create_specialist_with_mtm_relation(specialist, db)
+        return f"Client registered successfully"
+    except:
         return JSONResponse(content={"message": "There is already a user with such an email"}, status_code=409)
-
-    return f"Client registered successfully"
 
 
 @router.put("/{specialistId}/email")

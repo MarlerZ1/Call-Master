@@ -1,11 +1,10 @@
 from datetime import datetime
 
-from cryptography.fernet import Fernet
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy import TIMESTAMP
 
-from config import SECRET_KEY
-from databases import Base, SessionLocal
+from apps.utils.password import hash_password
+from models.databases import Base, SessionLocal
 
 
 class ClientModel(Base):
@@ -27,7 +26,7 @@ class ClientModel(Base):
             middle_name=client.middle_name,
             email=client.email,
             phone_number=client.phone_number,
-            password=Fernet(SECRET_KEY).encrypt(client.password.encode()).decode(),
+            password= hash_password(client.password),
             timestamp=client.timestamp
         )
 
@@ -50,7 +49,7 @@ class ClientModel(Base):
 
     @staticmethod
     def change_password(client, password, db):
-        client.password = Fernet(SECRET_KEY).encrypt(password.password.encode()).decode()
+        client.password = hash_password(password.password)
         db.commit()
 
 
@@ -73,15 +72,15 @@ class SpecialistModel(Base):
             middle_name=specialist.middle_name,
             email=specialist.email,
             phone_number=specialist.phone_number,
-            password=Fernet(SECRET_KEY).encrypt(specialist.password.encode()).decode(),
+            password=hash_password(specialist.password),
             timestamp=specialist.timestamp,
         )
 
         try:
             db.add(specialist_model)
             db.flush()
-        except:
-            return -1
+        except Exception as e:
+            raise e
 
         for specialization in specialist.specialization:
             db.add(SpecialistSpecializationsMTM(
@@ -108,7 +107,7 @@ class SpecialistModel(Base):
 
     @staticmethod
     def change_password(client, password, db):
-        client.password = Fernet(SECRET_KEY).encrypt(password.password.encode()).decode()
+        client.password = hash_password(password.password)
         db.commit()
     # mtm = relationship("SpecialistSpecializationsMTM", back_populates="SpecialistModel")
 

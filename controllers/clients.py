@@ -1,12 +1,10 @@
-from cryptography.fernet import Fernet
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from config import SECRET_KEY
-from databases import get_db
+from models.databases import get_db
 from models.models import ClientModel
-from models.schemas import EmailVerification, PhoneVerification, PasswordVerification, ClientDTO, Client
+from controllers.schemas import EmailVerification, PhoneVerification, PasswordVerification, ClientDTO, Client
 
 router = APIRouter(prefix="/client")
 
