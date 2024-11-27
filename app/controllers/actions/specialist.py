@@ -8,7 +8,7 @@ async def create_specialist(new_specialist: NewSpecialist):
 
 
 async def get_specialist_by_id(specialist_id: int):
-    specialist = await specialist_service.get_specialist(specialist_id)
+    specialist = await specialist_service.get_client(specialist_id)
     return specialist
 
 
