@@ -32,7 +32,7 @@ load_models()
 
 
 
-from app.models.database.settings import config as db_conf
+from app.models.repository.sqlalchemy_repo.database.settings import config as db_conf
 config.set_main_option("sqlalchemy.url", db_conf.get_url())
 
 # add your model's MetaData object here
@@ -40,7 +40,7 @@ config.set_main_option("sqlalchemy.url", db_conf.get_url())
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from app.models.data_models.main import Base
+from app.models.repository.sqlalchemy_repo.data_models.main import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

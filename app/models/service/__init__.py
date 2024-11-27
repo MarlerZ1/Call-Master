@@ -1,8 +1,8 @@
-from app.models.data_models.client import ClientModel
-from app.models.data_models.specialist import SpecialistModel
+from app.models.repository.sqlalchemy_repo.data_models import ClientModel
+from app.models.repository.sqlalchemy_repo.data_models.specialist import SpecialistModel
 from app.models.service.client import ClientService
-from app.models.database.main import get_async_session
-from app.models.database.settings import config
+from app.models.repository.sqlalchemy_repo.database.main import get_async_session
+from app.models.repository.sqlalchemy_repo.database.settings import config
 from app.models.service.specialist import SpecialistService
 
 DATABASE_URL = f"postgresql+asyncpg://{config.user}:{config.password}@{config.host}:{config.port}/{config.database}"
