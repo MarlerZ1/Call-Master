@@ -19,7 +19,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 def load_models():
-    base_package = "app.models.data_models"
+    base_package = "app.models.repository.sqlalchemy_repo.data_models"
     base_module = importlib.import_module(base_package)
 
     for _, module_name, _ in pkgutil.iter_modules(base_module.__path__):
@@ -32,7 +32,7 @@ load_models()
 
 
 
-from app.models.database.settings import config as db_conf
+from app.models.repository.sqlalchemy_repo.database.settings import config as db_conf
 config.set_main_option("sqlalchemy.url", db_conf.get_url())
 
 # add your model's MetaData object here
@@ -40,7 +40,7 @@ config.set_main_option("sqlalchemy.url", db_conf.get_url())
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from app.models.data_models.main import Base
+from app.models.repository.sqlalchemy_repo.data_models.main import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

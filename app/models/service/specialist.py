@@ -1,8 +1,7 @@
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from app.models.data_models.client import ClientModel
-from app.models.data_models.specialist import SpecialistModel, SpecialistSpecializationsMTM, Speciality
+from app.models.repository.sqlalchemy_repo.data_models.specialist import SpecialistModel, SpecialistSpecializationsMTM, Speciality
 
 
 # class SpecializationService:
@@ -33,7 +32,7 @@ class SpecialistService:
         self._database_engine = database_engine
 
 
-    async def register(self, new_specialist: dict) -> ClientModel:
+    async def register(self, new_specialist: dict) -> SpecialistModel:
         # todo: осуществить проверку пароля
         # todo: осуществить проверку телефона
         # todo: осуществить проверку почты
@@ -81,7 +80,7 @@ class SpecialistService:
                 await session.rollback()
                 raise
 
-    async def get_client(self, specialist_id: int) -> ClientModel:
+    async def get_client(self, specialist_id: int) -> SpecialistModel:
         async with self._database_engine() as session:
             try:
                 query = select(self._specialist_model).where(

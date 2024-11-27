@@ -3,10 +3,10 @@ from psycopg2 import sql
 
 from sqlalchemy import create_engine, inspect
 
-from app.models.data_models.client import ClientModel
-from app.models.data_models.specialist import SpecialistModel, Speciality, SpecialistSpecializationsMTM
+from app.models.repository.sqlalchemy_repo.data_models import ClientModel
+from app.models.repository.sqlalchemy_repo.data_models import SpecialistModel, Speciality, SpecialistSpecializationsMTM
 
-from app.models.database.settings import config
+from app.models.repository.sqlalchemy_repo.database.settings import config
 
 
 def create_db(

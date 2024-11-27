@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 
-from app.models.data_models.main import Base
+from app.models.repository.sqlalchemy_repo.data_models.main import Base
 
 
 class SpecialistModel(Base):
