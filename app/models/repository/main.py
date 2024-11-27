@@ -3,6 +3,8 @@ from sqlalchemy import select
 from models.repository.base import RepositoryInterface
 from models.repository.sqlalchemy_repo.data_models.client import ClientModel
 
+from app.models.repository.sqlalchemy_repo.data_models.specialist import SpecialistModel
+
 
 class SQLAlchemyRepo(RepositoryInterface):
     model = None
@@ -41,3 +43,6 @@ class SQLAlchemyRepo(RepositoryInterface):
 
 class ClientRepo(SQLAlchemyRepo):
     model = ClientModel
+
+class SpecialistRepo(SQLAlchemyRepo):
+    model =  SpecialistModel

@@ -16,7 +16,7 @@ class ClientService(ClientServiceInterface):
         await self._client_repository.create(new_client)
 
     async def get_client(self, client_id: int):
-        ...
+        return await self._client_repository.get(client_id)
 
     async def update_email(self, client_id: int, new_email: str) -> None:
         try:
