@@ -1,8 +1,8 @@
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from app.models.repository.sqlalchemy_repo.data_models import ClientModel
-from app.models.repository.sqlalchemy_repo.data_models.specialist import SpecialistModel, SpecialistSpecializationsMTM, Speciality
+from app.models.data_models.client import ClientModel
+from app.models.data_models.specialist import SpecialistModel, SpecialistSpecializationsMTM, Speciality
 
 
 # class SpecializationService:
