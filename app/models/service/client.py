@@ -1,5 +1,3 @@
-from sqlalchemy import select, update
-
 from models.domain.interfaces import ClientServiceInterface
 from models.repository.base import RepositoryInterface
 
