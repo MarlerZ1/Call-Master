@@ -1,7 +1,8 @@
 from models.repository.base import RepositoryInterface
 from models.repository.sqlalchemy_repo.data_models.client import ClientModel
 from sqlalchemy import select, update
-from sqlalchemy.engine import row
+
+from app.models.repository.sqlalchemy_repo.data_models.specialist import SpecialistModel
 
 
 class SQLAlchemyRepo(RepositoryInterface):
@@ -41,7 +42,7 @@ class SQLAlchemyRepo(RepositoryInterface):
                 object_dict = (lambda r: {c.name: getattr(r, c.name) for c in r.__table__.columns})(model_data)
 
                 stmt = update(self.model).where(self.model.id == model_uid).values(**object_dict)
-
+                print(object_dict)
                 await session.execute(stmt)
                 await session.commit()
 
@@ -61,3 +62,7 @@ class SQLAlchemyRepo(RepositoryInterface):
 
 class ClientRepo(SQLAlchemyRepo):
     model = ClientModel
+
+
+class SpecialistRepo(SQLAlchemyRepo):
+    model = SpecialistModel
