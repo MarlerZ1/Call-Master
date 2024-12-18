@@ -10,7 +10,15 @@ class SpecialistService(SpecialistServiceInterface):
     def __init__(self, repository: RepositoryInterface):
         self._specialist_repository = repository
 
+    async def _update_specialist(self, specialist_id: int, attribute_key: str, attribute_value: str):
+        updating_client = await self._specialist_repository.get(specialist_id)
+
+        setattr(updating_client, attribute_key, attribute_value)
+
+        return await self._specialist_repository.update(specialist_id, updating_client)
+
     async def register(self, new_specialist: dict) -> SpecialistModel:
+        # todo: переделать с unit of works
         # todo: осуществить проверку пароля
         # todo: осуществить проверку телефона
         # todo: осуществить проверку почты
@@ -65,10 +73,10 @@ class SpecialistService(SpecialistServiceInterface):
         except BaseException as e:
             raise e
 
-        specialist_object = await self._specialist_repository.get(specialist_id)
-        specialist_object.email = new_email
-
-        return await self._specialist_repository.update(specialist_id, specialist_object)
+        try:
+            return await self._update_specialist(specialist_id, 'email', new_email)
+        except BaseException as e:
+            raise e
 
     async def update_phone(self, specialist_id: int, new_phone: str) -> None:
         try:
@@ -77,10 +85,10 @@ class SpecialistService(SpecialistServiceInterface):
         except BaseException as e:
             raise e
 
-        specialist_object = await self._specialist_repository.get(specialist_id)
-        specialist_object.phone_number = new_phone
-
-        return await self._specialist_repository.update(specialist_id, specialist_object)
+        try:
+            return await self._update_specialist(specialist_id, 'phone_number', new_phone)
+        except BaseException as e:
+            raise e
 
     async def change_password(self, specialist_id: int, old_password: str, new_password: str) -> None:
         try:
@@ -90,6 +98,7 @@ class SpecialistService(SpecialistServiceInterface):
         except BaseException as e:
             raise e
 
-        specialist_object = await self._specialist_repository.get(specialist_id)
-        specialist_object.password = new_password
-        return await self._specialist_repository.update(specialist_id, specialist_object)
+        try:
+            return await self._update_specialist(specialist_id, 'password', new_password)
+        except BaseException as e:
+            raise e

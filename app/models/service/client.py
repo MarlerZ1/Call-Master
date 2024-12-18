@@ -6,6 +6,13 @@ class ClientService(ClientServiceInterface):
     def __init__(self, repository: RepositoryInterface):
         self._client_repository = repository
 
+    async def _update_client(self, client_id: int, attribute_key: str, attribute_value: str):
+        updating_client = await self._client_repository.get(client_id)
+
+        setattr(updating_client, attribute_key, attribute_value)
+
+        return await self._client_repository.update(client_id, updating_client)
+
     async def register(self, new_client: dict):
         # todo: осуществить проверку пароля
         # todo: осуществить проверку телефона
@@ -23,9 +30,10 @@ class ClientService(ClientServiceInterface):
         except BaseException as e:
             raise e
 
-        client_object = await self._client_repository.get(client_id)
-        client_object.email = new_email
-        return await self._client_repository.update(client_id, client_object)
+        try:
+            return await self._update_client(client_id, 'email', new_email)
+        except BaseException as e:
+            raise e
 
     async def update_phone(self, client_id: int, new_phone: str) -> None:
         try:
@@ -34,9 +42,10 @@ class ClientService(ClientServiceInterface):
         except BaseException as e:
             raise e
 
-        client_object = await self._client_repository.get(client_id)
-        client_object.phone_number = new_phone
-        return await self._client_repository.update(client_id, client_object)
+        try:
+            return await self._update_client(client_id, 'phone_number', new_phone)
+        except BaseException as e:
+            raise e
 
     async def change_password(self, client_id: int, old_password: str, new_password: str) -> None:
         try:
@@ -46,6 +55,7 @@ class ClientService(ClientServiceInterface):
         except BaseException as e:
             raise e
 
-        client_object = await self._client_repository.get(client_id)
-        client_object.password = new_password
-        return await self._client_repository.update(client_id, client_object)
+        try:
+            return await self._update_client(client_id, 'password', new_password)
+        except BaseException as e:
+            raise e
