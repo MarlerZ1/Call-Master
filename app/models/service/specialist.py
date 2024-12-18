@@ -4,6 +4,7 @@ from app.models.domain.interfaces import SpecialistServiceInterface
 from app.models.repository.base import RepositoryInterface
 from app.models.repository.sqlalchemy_repo.data_models.specialist import SpecialistModel, SpecialistSpecializationsMTM, \
     Speciality
+from app.models.service.exceptions import WrongPhoneException
 
 
 class SpecialistService(SpecialistServiceInterface):
@@ -76,7 +77,7 @@ class SpecialistService(SpecialistServiceInterface):
         try:
             return await self._update_specialist(specialist_id, 'email', new_email)
         except BaseException as e:
-            raise e
+            raise WrongPhoneException(f"Неверно задана почта. Ошибка {e}")
 
     async def update_phone(self, specialist_id: int, new_phone: str) -> None:
         try:
@@ -88,7 +89,7 @@ class SpecialistService(SpecialistServiceInterface):
         try:
             return await self._update_specialist(specialist_id, 'phone_number', new_phone)
         except BaseException as e:
-            raise e
+            raise WrongPhoneException(f"Неверно задан номер телефона. Ошибка {e}")
 
     async def change_password(self, specialist_id: int, old_password: str, new_password: str) -> None:
         try:

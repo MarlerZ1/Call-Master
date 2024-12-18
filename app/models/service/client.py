@@ -1,6 +1,8 @@
 from models.domain.interfaces import ClientServiceInterface
 from models.repository.base import RepositoryInterface
 
+from app.models.service.exceptions import WrongPhoneException, WrongEmailException
+
 
 class ClientService(ClientServiceInterface):
     def __init__(self, repository: RepositoryInterface):
@@ -33,7 +35,7 @@ class ClientService(ClientServiceInterface):
         try:
             return await self._update_client(client_id, 'email', new_email)
         except BaseException as e:
-            raise e
+            raise WrongEmailException(f"Неверно задана почта. Ошибка {e}")
 
     async def update_phone(self, client_id: int, new_phone: str) -> None:
         try:
@@ -45,7 +47,7 @@ class ClientService(ClientServiceInterface):
         try:
             return await self._update_client(client_id, 'phone_number', new_phone)
         except BaseException as e:
-            raise e
+            raise WrongPhoneException(f"Неверно задан номер телефона. Ошибка {e}")
 
     async def change_password(self, client_id: int, old_password: str, new_password: str) -> None:
         try:
